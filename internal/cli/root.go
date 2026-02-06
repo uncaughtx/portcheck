@@ -28,7 +28,7 @@ Examples:
 	RunE: runCheck,
 }
 
-// Execute runs the root command
+// Execute runs the root command.
 func Execute() error {
 	return rootCmd.Execute()
 }
@@ -60,5 +60,5 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 	// Ignore errors if config file doesn't exist
-	_ = viper.ReadInConfig()
+	_ = viper.ReadInConfig() //nolint:errcheck // Config file is optional
 }

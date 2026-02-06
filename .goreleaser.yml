@@ -57,7 +57,9 @@ snapshot:
 
 changelog:
   sort: asc
-  use: github
+  use: git
+  abbrev: 0
+
   filters:
     exclude:
       - '^docs:'

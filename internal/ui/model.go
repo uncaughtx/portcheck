@@ -9,7 +9,7 @@ import (
 	procinfo "github.com/uncaughtx/portcheck/internal/process"
 )
 
-// State represents the current UI state
+// State represents the current UI state.
 type State int
 
 const (
@@ -20,19 +20,26 @@ const (
 	StateDone
 )
 
-// Model is the bubbletea model for the interactive UI
+// Key constants for keyboard input.
+const (
+	keyQuit  = "q"
+	keyEsc   = "esc"
+	keyCtrlC = "ctrl+c"
+)
+
+// Model is the bubbletea model for the interactive UI.
 type Model struct {
-	port      int
-	process   *procinfo.Info
-	state     State
-	err       error
-	width     int
-	height    int
-	confirmed bool
-	killed    bool
+	port    int
+	process *procinfo.Info
+	state   State
+	err     error
+	width   int
+	height  int
+	// confirmed bool // Currently unused
+	killed bool
 }
 
-// NewModel creates a new UI model
+// NewModel creates a new UI model.
 func NewModel(port int, proc *procinfo.Info) Model {
 	return Model{
 		port:    port,
@@ -41,12 +48,12 @@ func NewModel(port int, proc *procinfo.Info) Model {
 	}
 }
 
-// Init initializes the model
+// Init initializes the model.
 func (m Model) Init() tea.Cmd {
 	return nil
 }
 
-// Update handles messages
+// Update handles messages.
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -77,7 +84,7 @@ func (m Model) handleMenuKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.state = StateConfirmKill
 	case "i":
 		m.state = StateInfo
-	case "q", "esc", "ctrl+c":
+	case keyQuit, keyEsc, keyCtrlC:
 		return m, tea.Quit
 	}
 	return m, nil
@@ -85,11 +92,11 @@ func (m Model) handleMenuKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 func (m Model) handleInfoKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
-	case "b", "esc":
+	case "b", keyEsc:
 		m.state = StateMenu
 	case "k":
 		m.state = StateConfirmKill
-	case "q", "ctrl+c":
+	case keyQuit, keyCtrlC:
 		return m, tea.Quit
 	}
 	return m, nil
@@ -100,9 +107,9 @@ func (m Model) handleConfirmKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "y", "Y":
 		m.state = StateKilling
 		return m, m.killProcess
-	case "n", "N", "esc":
+	case "n", "N", keyEsc:
 		m.state = StateMenu
-	case "q", "ctrl+c":
+	case keyQuit, keyCtrlC:
 		return m, tea.Quit
 	}
 	return m, nil
@@ -110,7 +117,7 @@ func (m Model) handleConfirmKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 func (m Model) handleDoneKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
-	case "q", "esc", "ctrl+c", "enter":
+	case keyQuit, keyEsc, keyCtrlC, "enter":
 		return m, tea.Quit
 	}
 	return m, nil
@@ -127,7 +134,7 @@ func (m Model) killProcess() tea.Msg {
 	return killResultMsg{err}
 }
 
-// View renders the UI
+// View renders the UI.
 func (m Model) View() string {
 	switch m.state {
 	case StateMenu:
@@ -228,7 +235,7 @@ func (m Model) infoView() string {
 func (m Model) confirmView() string {
 	var b strings.Builder
 
-	b.WriteString(BoxStyle.Render(fmt.Sprintf("  Terminate Process?  ")))
+	b.WriteString(BoxStyle.Render("  Terminate Process?  "))
 	b.WriteString("\n\n")
 
 	b.WriteString(DangerStyle.Render("You are about to kill:"))

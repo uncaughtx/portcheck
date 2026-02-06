@@ -139,15 +139,16 @@ func (d *windowsDetector) enrichProcessInfo(ctx context.Context, pid int32) (*pr
 		return nil, err
 	}
 
-	name, _ := proc.NameWithContext(ctx)
-	cmdline, _ := proc.CmdlineWithContext(ctx)
-	cwd, _ := proc.CwdWithContext(ctx)
-	username, _ := proc.UsernameWithContext(ctx)
-	createTime, _ := proc.CreateTimeWithContext(ctx)
-	ppid, _ := proc.PpidWithContext(ctx)
-	memInfo, _ := proc.MemoryInfoWithContext(ctx)
-	cpuPercent, _ := proc.CPUPercentWithContext(ctx)
-	children, _ := proc.ChildrenWithContext(ctx)
+	// Process info fields may fail due to permissions or process state - gracefully ignore
+	name, _ := proc.NameWithContext(ctx)             //nolint:errcheck // Optional field
+	cmdline, _ := proc.CmdlineWithContext(ctx)       //nolint:errcheck // Optional field
+	cwd, _ := proc.CwdWithContext(ctx)               //nolint:errcheck // Optional field
+	username, _ := proc.UsernameWithContext(ctx)     //nolint:errcheck // Optional field
+	createTime, _ := proc.CreateTimeWithContext(ctx) //nolint:errcheck // Optional field
+	ppid, _ := proc.PpidWithContext(ctx)             //nolint:errcheck // Optional field
+	memInfo, _ := proc.MemoryInfoWithContext(ctx)    //nolint:errcheck // Optional field
+	cpuPercent, _ := proc.CPUPercentWithContext(ctx) //nolint:errcheck // Optional field
+	children, _ := proc.ChildrenWithContext(ctx)     //nolint:errcheck // Optional field
 
 	info := &procinfo.Info{
 		PID:        pid,
@@ -174,7 +175,7 @@ func (d *windowsDetector) enrichProcessInfo(ctx context.Context, pid int32) (*pr
 	if ppid > 0 {
 		parent, err := process.NewProcessWithContext(ctx, ppid)
 		if err == nil {
-			info.ParentName, _ = parent.NameWithContext(ctx)
+			info.ParentName, _ = parent.NameWithContext(ctx) //nolint:errcheck // Optional field
 		}
 	}
 

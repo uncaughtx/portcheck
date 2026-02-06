@@ -112,7 +112,7 @@ func (d *linuxDetector) listAllSS(ctx context.Context) ([]*procinfo.PortInfo, er
 
 	var result []*procinfo.PortInfo
 	seenPorts := make(map[int]bool)
-	
+
 	// Parse output line by line
 	// Format: State Recv-Q Send-Q Local Address:Port Peer Address:Port Process
 	// LISTEN 0 128 *:22 *:* users:(("sshd",pid=1234,fd=3))
@@ -213,7 +213,7 @@ func (d *linuxDetector) listAllProc(ctx context.Context) ([]*procinfo.PortInfo, 
 			}
 			seenPorts[port] = true
 
-			inode, _ := strconv.ParseUint(fields[9], 10, 64)
+			inode, _ := strconv.ParseUint(fields[9], 10, 64) //nolint:errcheck // We check for zero value below
 			if inode == 0 {
 				continue
 			}
@@ -264,7 +264,7 @@ func (d *linuxDetector) findInodeByPort(port int) (uint64, error) {
 			if len(localParts) == 2 && localParts[1] == portHex {
 				// State field[3] == "0A" means LISTEN
 				if fields[3] == "0A" {
-					inode, _ := strconv.ParseUint(fields[9], 10, 64)
+					inode, _ := strconv.ParseUint(fields[9], 10, 64) //nolint:errcheck // Error returns 0 which is handled
 					return inode, nil
 				}
 			}
@@ -317,15 +317,16 @@ func (d *linuxDetector) enrichProcessInfo(ctx context.Context, pid int32) (*proc
 		return nil, err
 	}
 
-	name, _ := proc.NameWithContext(ctx)
-	cmdline, _ := proc.CmdlineWithContext(ctx)
-	cwd, _ := proc.CwdWithContext(ctx)
-	username, _ := proc.UsernameWithContext(ctx)
-	createTime, _ := proc.CreateTimeWithContext(ctx)
-	ppid, _ := proc.PpidWithContext(ctx)
-	memInfo, _ := proc.MemoryInfoWithContext(ctx)
-	cpuPercent, _ := proc.CPUPercentWithContext(ctx)
-	children, _ := proc.ChildrenWithContext(ctx)
+	// Process info fields may fail due to permissions or process state - gracefully ignore
+	name, _ := proc.NameWithContext(ctx)             //nolint:errcheck // Optional field
+	cmdline, _ := proc.CmdlineWithContext(ctx)       //nolint:errcheck // Optional field
+	cwd, _ := proc.CwdWithContext(ctx)               //nolint:errcheck // Optional field
+	username, _ := proc.UsernameWithContext(ctx)     //nolint:errcheck // Optional field
+	createTime, _ := proc.CreateTimeWithContext(ctx) //nolint:errcheck // Optional field
+	ppid, _ := proc.PpidWithContext(ctx)             //nolint:errcheck // Optional field
+	memInfo, _ := proc.MemoryInfoWithContext(ctx)    //nolint:errcheck // Optional field
+	cpuPercent, _ := proc.CPUPercentWithContext(ctx) //nolint:errcheck // Optional field
+	children, _ := proc.ChildrenWithContext(ctx)     //nolint:errcheck // Optional field
 
 	info := &procinfo.Info{
 		PID:        pid,
@@ -352,7 +353,7 @@ func (d *linuxDetector) enrichProcessInfo(ctx context.Context, pid int32) (*proc
 	if ppid > 0 {
 		parent, err := process.NewProcessWithContext(ctx, ppid)
 		if err == nil {
-			info.ParentName, _ = parent.NameWithContext(ctx)
+			info.ParentName, _ = parent.NameWithContext(ctx) //nolint:errcheck // Optional field
 		}
 	}
 

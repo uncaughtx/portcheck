@@ -65,7 +65,7 @@ func runList(cmd *cobra.Command, args []string) error {
 		processPorts := byProcess[pi.Process.PID]
 		byProcess[pi.Process.PID] = nil // Mark as printed
 
-		fmt.Printf("  %s %s (PID %d)\n", 
+		fmt.Printf("  %s %s (PID %d)\n",
 			ui.LabelStyle.Render("Process:"),
 			ui.HighlightStyle.Render(pi.Process.Name),
 			pi.Process.PID)
