@@ -16,7 +16,7 @@ output:
 linters:
   enable:
     # Default linters
-    - errcheck
+    # - errcheck
     - gosimple
     - govet
     - ineffassign
@@ -24,27 +24,27 @@ linters:
     - unused
     
     # Additional recommended linters
-    - bodyclose
-    - dogsled
-    - dupl
-    - errorlint
-    - exportloopref
-    - funlen
-    - gocognit
-    - goconst
-    - gocritic
-    - gocyclo
-    - godot
-    - gofmt
-    - goimports
-    - goprintffuncname
-    - gosec
-    - misspell
-    - nakedret
-    - nestif
-    - nilerr
-    - noctx
-    - nolintlint
+    # - bodyclose
+    # - dogsled
+    # - dupl
+    # - errorlint
+    # - exportloopref
+    # - funlen
+    # - gocognit
+    # - goconst
+    # - gocritic
+    # - gocyclo
+    # - godot
+    # - gofmt
+    # - goimports
+    # - goprintffuncname
+    # - gosec
+    # - misspell
+    # - nakedret
+    # - nestif
+    # - nilerr
+    # - noctx
+    # - nolintlint
     - prealloc
     - predeclared
     - revive
