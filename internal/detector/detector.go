@@ -6,7 +6,7 @@ import (
 	"github.com/uncaughtx/portcheck/internal/process"
 )
 
-// Detector finds processes listening on network ports
+// Detector finds processes listening on network ports.
 type Detector interface {
 	// FindByPort returns the process listening on the given port
 	FindByPort(ctx context.Context, port int) (*process.Info, error)
@@ -18,7 +18,7 @@ type Detector interface {
 	ListAll(ctx context.Context) ([]*process.PortInfo, error)
 }
 
-// New returns the appropriate detector for the current platform
+// New returns the appropriate detector for the current platform.
 func New() Detector {
 	// Build tags ensure correct implementation is compiled
 	return newPlatformDetector()

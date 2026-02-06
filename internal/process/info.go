@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Info contains detailed process information
+// Info contains detailed process information.
 type Info struct {
 	PID         int32     `json:"pid"`
 	Name        string    `json:"name"`
@@ -21,7 +21,7 @@ type Info struct {
 	ProjectName string    `json:"project_name,omitempty"` // from package.json, go.mod, etc.
 }
 
-// PortInfo associates a port with its process
+// PortInfo associates a port with its process.
 type PortInfo struct {
 	Port     int    `json:"port"`
 	Protocol string `json:"protocol"` // tcp, udp
@@ -29,12 +29,12 @@ type PortInfo struct {
 	Process  *Info  `json:"process"`
 }
 
-// Uptime returns human-readable duration since process started
+// Uptime returns human-readable duration since process started.
 func (i *Info) Uptime() string {
 	if i.StartTime.IsZero() {
 		return "unknown"
 	}
-	
+
 	d := time.Since(i.StartTime)
 	switch {
 	case d < time.Minute:
@@ -56,7 +56,7 @@ func (i *Info) Uptime() string {
 	}
 }
 
-// Summary returns a one-line summary of the process
+// Summary returns a one-line summary of the process.
 func (i *Info) Summary() string {
 	if i.ProjectName != "" {
 		return fmt.Sprintf("%s (%s)", i.Name, i.ProjectName)
