@@ -35,7 +35,7 @@ func runCheck(cmd *cobra.Command, args []string) error {
 		if jsonOut {
 			fmt.Println(`{"status":"available","port":` + args[0] + `}`)
 		} else {
-			fmt.Printf("✓ Port %d is available\n", port)
+			fmt.Printf("[AVAILABLE] Port %d is free\n", port)
 		}
 		return nil
 	}

@@ -239,7 +239,7 @@ func (m Model) confirmView() string {
 
 	if m.process.ChildCount > 0 {
 		b.WriteString("\n")
-		b.WriteString(WarningStyle.Render(fmt.Sprintf("  ⚠ This process has %d child process(es)", m.process.ChildCount)))
+		b.WriteString(WarningStyle.Render(fmt.Sprintf("  [WARNING] This process has %d child process(es)", m.process.ChildCount)))
 		b.WriteString("\n")
 	}
 
@@ -259,10 +259,10 @@ func (m Model) doneView() string {
 	var b strings.Builder
 
 	if m.killed {
-		b.WriteString(SuccessStyle.Render(fmt.Sprintf("\n  ✓ Process %d terminated successfully\n", m.process.PID)))
+		b.WriteString(SuccessStyle.Render(fmt.Sprintf("\n  [SUCCESS] Process %d terminated\n", m.process.PID)))
 		b.WriteString(fmt.Sprintf("\n  Port %d is now available", m.port))
 	} else if m.err != nil {
-		b.WriteString(ErrorStyle.Render(fmt.Sprintf("\n  ✗ Failed to terminate process: %v", m.err)))
+		b.WriteString(ErrorStyle.Render(fmt.Sprintf("\n  [FAILED] Could not terminate process: %v", m.err)))
 	}
 
 	b.WriteString("\n\n")
