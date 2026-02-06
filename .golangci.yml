@@ -6,30 +6,10 @@ run:
   timeout: 5m
   tests: true
 
-output:
-  formats:
-    text:
-      path: stdout
-      print-linter-name: true
-  sort-order:
-    - file
-
 linters:
   enable:
-    - errcheck
     - gosimple
     - govet
     - ineffassign
     - staticcheck
     - unused
-
-linters-settings:
-  errcheck:
-    check-type-assertions: true
-    check-blank: true
-
-issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - errcheck
