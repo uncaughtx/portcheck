@@ -43,6 +43,7 @@ func init() {
 	// Subcommands
 	rootCmd.AddCommand(scanCmd)
 	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(killCmd)
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(completionCmd)
 }
